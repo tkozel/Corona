@@ -31,19 +31,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rvItems);
 
         statsViewModel = new ViewModelProvider(this).get(StatsViewModel.class);
-        loadData();
-    }
-
-    public void loadData() {
-        Handler handler = new Handler(Looper.getMainLooper());
-        Executor ex = Executors.newSingleThreadExecutor();
-        ex.execute(()->{
-            Date date;
-            CovidData covidData;
-            covidData = statsViewModel.getCurrentData();
-            handler.post(()->
-                recyclerView.setAdapter(new CoronaAdapter(covidData))
-            );
+        statsViewModel.getCurrentData().observe(this, (covidData)->{
+            recyclerView.setAdapter(new CoronaAdapter(covidData));
         });
     }
 
