@@ -15,13 +15,27 @@ import cz.uhk.corona.R;
 import cz.uhk.corona.model.CovidData;
 import cz.uhk.corona.model.DayStats;
 
-public class CoronaAdapter extends RecyclerView.Adapter<CoronaAdapter.ViewHolder> {
+/**
+ * Adapter poskytujici pristup k datum pro RecyclerView.
+ * @see RecyclerView
+ */
+public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.ViewHolder> {
+    /**
+     * Reference na data
+     */
     private CovidData covidData;
 
-    public CoronaAdapter(CovidData covidData) {
+    public CovidDataAdapter(CovidData covidData) {
         this.covidData = covidData;
     }
 
+    /**
+     * Vytvoreni views pro jeden item seznamu (RecyclerView)
+     * @param parent view vlastnika
+     * @param viewType typ view
+     * @return instance viewHolderu
+     * @see ViewHolder
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,6 +45,11 @@ public class CoronaAdapter extends RecyclerView.Adapter<CoronaAdapter.ViewHolder
         return new ViewHolder(v);
     }
 
+    /**
+     * "Plni" komponenty jednoho itemu daty
+     * @param holder ViewHolder
+     * @param position index bindovaneho itemu
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DayStats dayStats = covidData.getData().get(position);
@@ -39,6 +58,7 @@ public class CoronaAdapter extends RecyclerView.Adapter<CoronaAdapter.ViewHolder
         holder.countView.setText(String.valueOf(dayStats.getPositive()));
         holder.pcrView.setText(String.valueOf(dayStats.getPcr()));
         holder.agView.setText(String.valueOf(dayStats.getAnti()));
+        //barveni sudych/lichych polozek
         if (position % 2 == 0) {
             holder.rootView.setBackgroundColor(Color.rgb(230,230,230));
         } else {
@@ -46,11 +66,19 @@ public class CoronaAdapter extends RecyclerView.Adapter<CoronaAdapter.ViewHolder
         }
     }
 
+    /**
+     * Pocet prvku v RecyclerView
+     * @return pocet prvku
+     */
     @Override
     public int getItemCount() {
         return (covidData != null && covidData.getData() != null) ? covidData.getData().size() : 0;
     }
 
+    /**
+     * ViewHolder - drzi reference na kompoennty pro zobrazeni jedne polozky
+     * viz res/layout/stats_item
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View rootView;
         private TextView textView;

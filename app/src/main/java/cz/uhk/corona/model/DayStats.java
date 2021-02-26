@@ -1,12 +1,24 @@
 package cz.uhk.corona.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+/**
+ * Entita dennich statistik testovani COVID-19
+ * pouziva se jak pro ws/REST/JSON, tak pro ulozeni do DB Room
+ * @see SerializedName
+ * @see androidx.room.Room
+ */
+@Entity
 public class DayStats {
-    @SerializedName("datum")
-    private Date day;
+    @SerializedName("datum")  //mapovani atributu na JSON property name
+    @PrimaryKey
+    private Date day;  //do DB se bude konvertovat automaticky na timestamp
+                       // (viz CovidDatabase/@TypeConverters)
     @SerializedName("pocet_PCR_testy")
     private int pcr;
     @SerializedName("pocet_AG_testy")

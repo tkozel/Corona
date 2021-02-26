@@ -3,6 +3,10 @@ package cz.uhk.corona.model;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Wrapper, v nemz REST WS vraci response
+ * @see DayStats
+ */
 public class CovidData {
     private Date modified;
     private List<DayStats> data;
