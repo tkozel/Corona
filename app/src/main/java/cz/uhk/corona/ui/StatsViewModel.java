@@ -1,6 +1,8 @@
 package cz.uhk.corona.ui;
 
 import android.app.Application;
+import android.util.Log;
+import android.view.contentcapture.DataShareWriteAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,8 +12,10 @@ import androidx.lifecycle.ViewModel;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import cz.uhk.corona.db.CovidDatabase;
 import cz.uhk.corona.db.DayStatsDao;
@@ -79,7 +83,9 @@ public class StatsViewModel extends AndroidViewModel {
                 CovidData covidData = repository.loadCurrentData().execute().body();
                 Collections.reverse(covidData.getData());
                 data.postValue(covidData); // update live dat - provola obsever
-                updateDb();  //nactena data zaroven kesujeme do DB
+                Executors.newSingleThreadExecutor().execute(
+                        this::updateDb  //nactena data zaroven kesujeme do DB
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -92,7 +98,17 @@ public class StatsViewModel extends AndroidViewModel {
     private void updateDb() {
         DayStatsDao dao = CovidDatabase.getInstance(getApplication()).getDayStatsDao();
         List<DayStats> lst = data.getValue().getData();
-        dao.insertAll(lst.toArray(new DayStats[0]));
+        List<DayStats> lstDb = dao.getAll();
+
+        long lastAddedTime = (lstDb.size() > 0) ? lstDb.get(0).getDay().getTime() : 0;
+        int count = 0;
+        for (DayStats ds : lst) {
+            if (lastAddedTime < ds.getDay().getTime()) { //pridat jen novejsi
+                dao.insertAll(ds);
+                count++;
+            }
+        }
+        Log.d("DB", String.format("%d DB records inserted", count));
     }
 
 }

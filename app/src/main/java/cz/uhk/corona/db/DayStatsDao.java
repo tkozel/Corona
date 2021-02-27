@@ -2,6 +2,7 @@ package cz.uhk.corona.db;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface DayStatsDao {
     @Query("SELECT * FROM DayStats ORDER BY day desc")
     List<DayStats> getAll();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(DayStats... items);
 }
