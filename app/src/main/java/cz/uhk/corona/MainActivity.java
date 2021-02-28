@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
             model.downloadData();
             swipeLayout.setRefreshing(false);
         });
+    }
+
+    public void showChart(MenuItem item) {
+        Intent intent = new Intent(this, ChartActivity.class);
+        startActivity(intent);
     }
 
     /**

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Corona</string>
     <string name="mniAktual">Aktualizovat</string>
+    <string name="show_chart">Show Chart</string>
 </resources>

@@ -83,9 +83,7 @@ public class StatsViewModel extends AndroidViewModel {
                 CovidData covidData = repository.loadCurrentData().execute().body();
                 Collections.reverse(covidData.getData());
                 data.postValue(covidData); // update live dat - provola obsever
-                Executors.newSingleThreadExecutor().execute(
-                        this::updateDb  //nactena data zaroven kesujeme do DB
-                );
+                updateDb();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -99,6 +97,7 @@ public class StatsViewModel extends AndroidViewModel {
         DayStatsDao dao = CovidDatabase.getInstance(getApplication()).getDayStatsDao();
         List<DayStats> lst = data.getValue().getData();
         List<DayStats> lstDb = dao.getAll();
+        lstDb.remove(0);
 
         long lastAddedTime = (lstDb.size() > 0) ? lstDb.get(0).getDay().getTime() : 0;
         int count = 0;
