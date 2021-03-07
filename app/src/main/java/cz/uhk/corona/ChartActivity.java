@@ -73,7 +73,7 @@ public class ChartActivity extends AppCompatActivity {
             chart.setPinchZoom(false);
             chart.setDragEnabled(true);
             chart.setDoubleTapToZoomEnabled(true);
-            chart.setVisibleXRangeMaximum(30f);
+            //chart.setVisibleXRangeMaximum(30f);
             chart.invalidate();
         });
     }
