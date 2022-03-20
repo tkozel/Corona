@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
+import java.util.List;
 
 import cz.uhk.corona.R;
 import cz.uhk.corona.model.CovidData;
@@ -23,9 +24,9 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
     /**
      * Reference na data
      */
-    private CovidData covidData;
+    private List<DayStats> covidData;
 
-    public CovidDataAdapter(CovidData covidData) {
+    public CovidDataAdapter(List<DayStats> covidData) {
         this.covidData = covidData;
     }
 
@@ -52,7 +53,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DayStats dayStats = covidData.getData().get(position);
+        DayStats dayStats = covidData.get(position);
         String date = DateFormat.getDateInstance().format(dayStats.getDay());
         holder.textView.setText(date);
         holder.countView.setText(String.valueOf(dayStats.getPositive()));
@@ -72,7 +73,7 @@ public class CovidDataAdapter extends RecyclerView.Adapter<CovidDataAdapter.View
      */
     @Override
     public int getItemCount() {
-        return (covidData != null && covidData.getData() != null) ? covidData.getData().size() : 0;
+        return (covidData != null && covidData != null) ? covidData.size() : 0;
     }
 
     /**

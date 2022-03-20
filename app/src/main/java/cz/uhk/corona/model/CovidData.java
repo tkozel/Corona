@@ -6,7 +6,9 @@ import java.util.List;
 /**
  * Wrapper, v nemz REST WS vraci response
  * @see DayStats
+ * @deprecated v nove verzi JSONu neni pouzivano
  */
+@Deprecated
 public class CovidData {
     private Date modified;
     private List<DayStats> data;

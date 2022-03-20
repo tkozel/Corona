@@ -37,7 +37,7 @@ public class StatsViewModel extends AndroidViewModel {
     /**
      * Live data
      */
-    private MutableLiveData<CovidData> data;
+    private MutableLiveData<List<DayStats>> data;
 
     /**
      * Povinny konstruktor pri AndroidViewModel
@@ -51,7 +51,7 @@ public class StatsViewModel extends AndroidViewModel {
      * Pristup k drzenym live datum
      * @return data
      */
-    public LiveData<CovidData> getCurrentData() {
+    public LiveData<List<DayStats>> getCurrentData() {
         if (data == null) {
             data = new MutableLiveData<>();
         }
@@ -63,9 +63,7 @@ public class StatsViewModel extends AndroidViewModel {
      */
     public void loadDbData() {
         DayStatsDao dao = CovidDatabase.getInstance(getApplication()).getDayStatsDao();
-        CovidData covidData = new CovidData();
-        covidData.setData(dao.getAll());
-        data.postValue(covidData); //update live dat -> provolani observeru (viz Aktivita)
+        data.postValue(dao.getAll()); //update live dat -> provolani observeru (viz Aktivita)
     }
 
     /**
@@ -80,8 +78,8 @@ public class StatsViewModel extends AndroidViewModel {
                     .build();
             CovidService repository = retrofit.create(CovidService.class);
             try {
-                CovidData covidData = repository.loadCurrentData().execute().body();
-                Collections.reverse(covidData.getData());
+                List<DayStats> covidData = repository.loadCurrentData().execute().body();
+                Collections.reverse(covidData);
                 data.postValue(covidData); // update live dat - provola obsever
                 Executors.newSingleThreadExecutor().execute(
                         () -> updateDb()
@@ -97,7 +95,7 @@ public class StatsViewModel extends AndroidViewModel {
      */
     private void updateDb() {
         DayStatsDao dao = CovidDatabase.getInstance(getApplication()).getDayStatsDao();
-        List<DayStats> lst = data.getValue().getData();
+        List<DayStats> lst = data.getValue();
         List<DayStats> lstDb = dao.getAll();
 
         long lastAddedTime = (lstDb.size() > 0) ? lstDb.get(0).getDay().getTime() : 0;

@@ -1,6 +1,9 @@
 package cz.uhk.corona.ws;
 
+import java.util.List;
+
 import cz.uhk.corona.model.CovidData;
+import cz.uhk.corona.model.DayStats;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -10,5 +13,5 @@ import retrofit2.http.GET;
  */
 public interface CovidService {
     @GET("covid.php")
-    Call<CovidData> loadCurrentData();
+    Call<List<DayStats>> loadCurrentData();
 }
